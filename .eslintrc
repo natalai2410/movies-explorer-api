@@ -3,6 +3,8 @@
   "rules": {
     "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "no-console": "off",
-    "treatUndefinedAsUnspecified": 0
+    "treatUndefinedAsUnspecified": 0,
+    "new-cap": "off",
+    "semi": "error"
   }
 }

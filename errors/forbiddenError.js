@@ -4,5 +4,4 @@ class forbiddenError extends Error {
     this.statusCode = 403;
   }
 }
-
 module.exports = forbiddenError;

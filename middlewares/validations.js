@@ -23,16 +23,25 @@ const validationLogin = celebrate({
   }),
 });
 
-const validationCardId = celebrate({
+const validationMovieId = celebrate({
   params: Joi.object().keys({
     id: Joi.string().hex().length(24),
   }),
 });
 
-const validationCreateCard = celebrate({
+const validationCreateMovie = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().required().regex(urlRegex),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
+    image: Joi.string().required().regex(urlRegex),
+    trailer: Joi.string().required().regex(urlRegex),
+    thumbnail: Joi.string().required().regex(urlRegex),
+    movieId: Joi.number().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
@@ -40,6 +49,6 @@ module.exports = {
   validationLogin,
   validationCreateUser,
   validationUpdateUser,
-  validationCreateCard,
-  validationCardId,
+  validationCreateMovie,
+  validationMovieId,
 };
