@@ -27,8 +27,8 @@ app.use(express.json());
 const allowedCors = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'http://zvyagina.students.nomoredomains.club',
-  'https://zvyagina.students.nomoredomains.club',
+  'http://kryukova.students.nomoredomains.icu',
+  'https://kryukova.students.nomoredomains.icu',
 ];
 
 app.use(cors({
