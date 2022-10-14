@@ -23,8 +23,9 @@ const updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new ValidationError('Переданы некорректные данные при обновлении профиля'));
-      }
-      return next(new ServerError('Произошла ошибка'));
+      } if (err.code === 11000) {
+        return next(new ConflictError('Пользователь с таким email уже существует'));
+      } return next(new ServerError('Произошла ошибка'));
     });
 };
 
