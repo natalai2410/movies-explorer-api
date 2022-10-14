@@ -8,16 +8,17 @@ const NotFoundError = require('../errors/notFoundError');
 const ValidationError = require('../errors/validationError');
 const ConflictError = require('../errors/conflictError');
 const ServerError = require('../errors/serverError');
+const { REQUEST_OK } = require('../utils/constants');
 
 const updateUser = (req, res, next) => {
-  const { name, about } = req.body;
+  const { name, email } = req.body;
   const { _id } = req.user;
-  User.findByIdAndUpdate(_id, { name, about }, { new: true, runValidators: true })
+  User.findByIdAndUpdate(_id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь по указанному _id не найден');
       }
-      return res.status.send(user);
+      return res.status(REQUEST_OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -67,7 +68,7 @@ const getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь по указанному _id не найден');
       }
-      return res.status.send(user);
+      return res.status(REQUEST_OK).send(user);
     })
     .catch((err) => {
       if (err.kind === 'ObjectId') {
