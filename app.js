@@ -47,7 +47,7 @@ app.use(errors());
 app.use(errorHandler);
 
 async function main() {
-  await mongoose.connect(`${NODE_ENV === 'production' ? DB_ADDRESS : DB_ADDRESS}`, {
+  await mongoose.connect(`${NODE_ENV === 'production' ? DB_ADDRESS : 'mongodb://localhost:27017/moviesdb'}`, {
     useNewUrlParser: true,
     useUnifiedTopology: false,
   });
