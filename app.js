@@ -2,25 +2,25 @@ require('dotenv').config();
 
 const cors = require('cors');
 const express = require('express');
+const { errors } = require('celebrate');
+const mongoose = require('mongoose');
+const helmet = require('helmet');
 
-const { createUser, login } = require('./controllers/users');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const {
-  validationCreateUser,
-  validationLogin,
-} = require('./middlewares/validations');
+
 const routes = require('./routes');
 
-const { PORT = 3000 } = process.env;
+const apiLimiter = require('./middlewares/rate');
 
-// eslint-disable-next-line import/order
-const mongoose = require('mongoose');
-
-// eslint-disable-next-line import/order
-const { errors } = require('celebrate');
+const {
+  NODE_ENV,
+  PORT = 3000,
+  DB_ADDRESS,
+} = process.env;
 
 const app = express();
+app.use(helmet());
 
 app.use(express.json());
 
@@ -36,15 +36,8 @@ app.use(cors({
   credentials: true,
 }));
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
 app.use(requestLogger);
-app.post('/signin', validationLogin, login);
-app.post('/signup', validationCreateUser, createUser);
+app.use(apiLimiter);
 
 app.use(routes);
 
@@ -53,9 +46,8 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-// подключаемся к серверу mongo
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/moviesdb', {
+  await mongoose.connect(`${NODE_ENV === 'production' ? DB_ADDRESS : 'mongodb://localhost:27017/moviesdb'}`, {
     useNewUrlParser: true,
     useUnifiedTopology: false,
   });

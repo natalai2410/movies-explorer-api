@@ -5,7 +5,7 @@ const { REQUEST_OK, CREATE_OK } = require('../utils/constants');
 const NotFoundError = require('../errors/notFoundError');
 const ValidationError = require('../errors/validationError');
 const ServerError = require('../errors/serverError');
-const forbiddenError = require('../errors/forbiddenError');
+const ForbiddenError = require('../errors/forbiddenError');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
@@ -36,7 +36,7 @@ const deleteMovie = (req, res, next) => {
       if (movie.owner.toString() === req.user._id) {
         Movie.findByIdAndRemove(id).then(() => res.status(REQUEST_OK).send(movie)).catch(next);
       } else {
-        next(new forbiddenError('Отказано в доступе'));
+        next(new ForbiddenError('Отказано в доступе'));
       }
     })
     .catch(next);
