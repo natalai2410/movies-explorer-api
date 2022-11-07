@@ -8,8 +8,14 @@ const ServerError = require('../errors/serverError');
 const ForbiddenError = require('../errors/forbiddenError');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => res.send(movies.map((element) => element)))
+  const owner = req.user._id;
+  Movie.find({ owner })
+    .then((movies) => {
+      if (!movies) {
+        throw new NotFoundError('Данные не найдены!');
+      }
+      res.send(movies);
+    })
     .catch(next);
 };
 
